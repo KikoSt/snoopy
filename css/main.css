@@ -1,0 +1,121 @@
+body {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-size: .75em;
+    background: #eeeeee;
+    padding: 0px;
+    margin: 0px;
+}
+
+h1 {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.25em;
+    font-weight: normal;
+    font-style: italic;
+}
+
+hr {
+    margin: 25px 40px 25px 0px;
+    border: none;
+    background-color: #777777;
+    color: #7777777;
+    height: 1px;
+}
+
+/* input {                          */
+/*     border: 0px;                 */
+/*     background-color: #000000;   */
+/*     color: #ffffff;              */
+/*     padding-top: 1px;            */
+/*     padding-bottom: 2px;         */
+/*     padding-left: 20px;          */
+/*     padding-right: 20px;         */
+/* }                                */
+
+#topbar {
+    height: 50px;
+    width: 100%;
+    background-color: #000000;
+    padding: 0px;
+    margin: 0px;
+    background: #000000 url(../img/mdlogo_white-border.png) 10px 10px no-repeat;
+}
+
+#content {
+    padding-left: 40px;
+    padding-top: 20px;
+}
+
+#swf_content {
+    background: #ffffff;
+    display: table-row;
+}
+
+#swfbox {
+    display: table-cell;
+    background: #dddddd;
+    height: 100%;
+    padding: 10px;
+    padding-bottom: 20px;
+}
+
+object {
+    margin: 0px 10px 0px 10px;
+}
+
+#infobox {
+    display: table-cell;
+    height: 300px;
+    min-height: 300px;
+    padding: 10px;
+    padding-right: 50px;
+    padding-left: 50px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.info:nth-child(even) {
+    background-color: #cfcfcf;
+}
+
+#infobox.check {
+    background:#dddddd url(../img/check.png) 87% 90% no-repeat;
+}
+
+#infobox.cross {
+    background:#dddddd url(../img/cross.png) 87% 90% no-repeat;
+}
+
+.info {
+    padding: 3px;
+    width: 350px;
+    vertical-align: top;
+}
+
+.warn {
+    color: #ff0000;
+}
+
+.error {
+    color: #ff0000;
+    font-size: 1.6em;
+    font-style: italic;
+}
+
+.preview_header {
+    padding-left: 10px;
+}
+
+.infolabel {
+    display: inline-block;
+    width: 170px;
+    font-weight: bold;
+}
+
+img.icon_result {
+    vertical-align: bottom;
+    float: right;
+}
