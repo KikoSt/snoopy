@@ -21,11 +21,11 @@
             <h2>properties</h2>
         </div>
         <!-- swf info fields -->
-        <?php foreach($fields AS $curField): ?>
+        <?php foreach($fileInfo->fields AS $curField): ?>
         <div class="info <?php echo $classes[$curField]; ?>"
              id="<?php echo $curField; ?>"
              title="<?php echo $recommendations[$curField]; ?>">
-            <span class="infolabel"><?php echo $labels[$curField]; ?>:</span>
+            <span class="infolabel"><?php echo $fileInfo->labels[$curField]; ?>:</span>
             <span><?php echo $swf->{$curField}; ?> <?php echo $units[$curField]; ?></span>
         </div>
         <?php endforeach; ?>

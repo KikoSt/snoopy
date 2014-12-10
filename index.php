@@ -7,54 +7,40 @@ define('NUM_DECIMALS', 2);
 
 if(count($_FILES) > 0)
 {
-    $fields = array('name',
-                    'filesize',
-                    'framerate',
-                    'frames',
-                    'duration',
-                    'version',
-                    'dimensions');
+    $uploadError = false;
+    $mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
 
-    $labels = array('name'       => 'Analyzed file',
-                    'filesize'   => 'Filesize',
-                    'framerate'  => 'Framerate',
-                    'frames'     => 'Frames',
-                    'duration'   => 'Duration (calculated)',
-                    'version'    => 'Flash version',
-                    'dimensions' => 'Dimensions');
+    $filename = $_FILES['media']['name'];
+    $filepath = 'tmp/' . $filename;
+    $tempname = $_FILES['media']['tmp_name'];
+    $mimetype = $_FILES['media']['type'];
 
-    $units = array( 'name'       => '',
-                    'filesize'   => 'kB',
-                    'framerate'  => 'fps',
-                    'frames'     => '',
-                    'duration'   => 'seconds',
-                    'version'    => '',
-                    'dimensions' => 'px');
-
-    $rules = array( 'framerate'  => 30,
-                    'duration'   => 30,
-                    'filesize'   => 150);
-
-    $filename = 'tmp/' . $_FILES['swf_file']['name'];
-    $tempname = $_FILES['swf_file']['tmp_name'];
-    if($_FILES['swf_file']['type'] == 'application/x-shockwave-flash' || $_FILES['swf_file']['type'] == 'application/vnd.adobe.flash.movie')
+    if(in_array($mimetype, $mimetypes))
     {
-        move_uploaded_file($tempname, $filename);
+        move_uploaded_file($tempname, $filepath);
         chmod($filename, 0766);
 
-        $swf = analyzeSwf($filename);
+    }
+
+    // flash
+    if($mimetype == 'application/x-shockwave-flash' || $mimetype == 'application/vnd.adobe.flash.movie')
+    {
+        $swf = analyzeSwf('tmp/' . $filename);
 
         // additional classes depending on the test result
         $classes = array();
+        $recommendations = array();
         $classes['infobox'] = 'check';
 
+        $fileInfo = new SwfInfo();
+
         // verify and evaluate results
-        foreach($fields as $property)
+        foreach($fileInfo->fields as $property)
         {
-            if(isset($rules[$property]))
+            if(isset($fileInfo->rules[$property]))
             {
-                $recommendations[$property] = 'recommended: max. ' . $rules[$property] . ' ' . $units[$property];
-                if($swf->{$property} >= $rules[$property])
+                $recommendations[$property] = 'recommended: max. ' . $fileInfo->rules[$property] . ' ' . $fileInfo->units[$property];
+                if($swf->{$property} >= $fileInfo->rules[$property])
                 {
                     $classes[$property] = 'warn';
                     $classes['infobox'] = 'cross';
@@ -66,9 +52,18 @@ if(count($_FILES) > 0)
             }
         }
     }
+    else if($mimetype == 'image/gif')
+    {
+        $formatNotSupported = true;
+        $uploadError = true;
+    }
+    else if($mimetype == 'image/jpeg' || $mimetype == 'image/png')
+    {
+        $formatNotSupported = true;
+        $uploadError = true;
+    }
     else
     {
-        $filename = $_FILES['swf_file']['name'];
         $uploadError = true;
     }
 
@@ -136,7 +131,7 @@ function analyzeSwf($filename)
     $swf->duration = roundDecimals($swf->frames / $swf->framerate);
 
     // name without path
-    $swf->name = $_FILES['swf_file']['name'];
+    $swf->name = $_FILES['media']['name'];
 
     // dimensions as one string:
     $swf->dimensions = $swf->width . 'x' . $swf->height;
@@ -153,3 +148,85 @@ function roundDecimals($value)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+class MediaInfo
+{
+    public $fields;
+    public $labels;
+    public $units;
+    public $rules;
+
+    public function __construct()
+    {
+        $this->fields = array('name',
+                              'filesize',
+                              'framerate',
+                              'frames',
+                              'duration',
+                              'version',
+                              'dimensions');
+
+        $this->labels = array('name'       => 'Analyzed file',
+                              'filesize'   => 'Filesize',
+                              'framerate'  => 'Framerate',
+                              'frames'     => 'Frames',
+                              'duration'   => 'Duration (calculated)',
+                              'version'    => 'Flash version',
+                              'dimensions' => 'Dimensions');
+
+        $this->units = array( 'name'       => '',
+                              'filesize'   => 'kB',
+                              'framerate'  => 'fps',
+                              'frames'     => '',
+                              'duration'   => 'seconds',
+                              'version'    => '',
+                              'dimensions' => 'px');
+
+        $this->rules = array( 'framerate'  => 30,
+                              'duration'   => 30,
+                              'filesize'   => 150);
+    }
+}
+
+class SwfInfo extends MediaInfo
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+
+class GifInfo extends MediaInfo
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+
+class JpgInfo extends MediaInfo
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+
+class PngInfo extends MediaInfo
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
