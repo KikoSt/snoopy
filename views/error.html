@@ -1,3 +1,7 @@
 <div class="error">
-    Error! Please select a valid swf file. Couldn't process <?php echo $filename; ?>.
+    <?php if(!$formatNotSupported): ?>
+    Error! Please select a valid media file. Couldn't process <?php echo $filename; ?>.
+    <?php else: ?>
+    Couldn't process <?php echo $filename; ?>. The selected format [<?php echo $mimetype; ?>] is currently not supported.
+    <?php endif; ?>
 </div>

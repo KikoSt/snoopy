@@ -1,89 +1,91 @@
 <?php
 
-// check if there is a file attached
-// check if file is an swf file
+define('__ROOT__', './');
+
+require_once('classes.php');
+require_once('libraries/classes/APIConnector.class.php');
 
 define('NUM_DECIMALS', 2);
 
+// check if there is a file attached
 if(count($_FILES) > 0)
 {
-    $fields = array('name',
-                    'filesize',
-                    'framerate',
-                    'frames',
-                    'duration',
-                    'version',
-                    'dimensions');
+    $uploadError = false;
+    $formatNotSupported = false;
+    $mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
 
-    $labels = array('name'       => 'Analyzed file',
-                    'filesize'   => 'Filesize',
-                    'framerate'  => 'Framerate',
-                    'frames'     => 'Frames',
-                    'duration'   => 'Duration (calculated)',
-                    'version'    => 'Flash version',
-                    'dimensions' => 'Dimensions');
+    $filename    = $_FILES['media']['name'];
+    $filepath    = 'tmp/' . $filename;
+    $tempname    = $_FILES['media']['tmp_name'];
+    $mimetype    = $_FILES['media']['type'];
+    $filesize    = $_FILES['media']['size'];
+    $uploadError = $_FILES['media']['error'];
 
-    $units = array( 'name'       => '',
-                    'filesize'   => 'kB',
-                    'framerate'  => 'fps',
-                    'frames'     => '',
-                    'duration'   => 'seconds',
-                    'version'    => '',
-                    'dimensions' => 'px');
-
-    $rules = array( 'framerate'  => 30,
-                    'duration'   => 30,
-                    'filesize'   => 150);
-
-    $filename = 'tmp/' . $_FILES['swf_file']['name'];
-    $tempname = $_FILES['swf_file']['tmp_name'];
-    if($_FILES['swf_file']['type'] == 'application/x-shockwave-flash' || $_FILES['swf_file']['type'] == 'application/vnd.adobe.flash.movie')
+    if($uploadError !== 0)
     {
-        move_uploaded_file($tempname, $filename);
-        chmod($filename, 0766);
+        // upload errors:
+        // 1 - UPLOAD_ERR_INI_SIZE
+        // 2 - UPLOAD_ERR_FORM_SIZE
+        // 3 -
+        echo 'An error occured: ' . $uploadError;
+        exit($uploadError);
+    }
 
-        $swf = analyzeSwf($filename);
+    if(in_array($mimetype, $mimetypes))
+    {
+        move_uploaded_file($tempname, $filepath);
+        chmod($filepath, 0766);
 
-        // additional classes depending on the test result
-        $classes = array();
-        $classes['infobox'] = 'check';
+        // TODO: just for now ...
+        $implemented = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
 
-        // verify and evaluate results
-        foreach($fields as $property)
+        // flash
+        if(in_array($mimetype, $implemented))
         {
-            if(isset($rules[$property]))
+            switch($mimetype)
             {
-                $recommendations[$property] = 'recommended: max. ' . $rules[$property] . ' ' . $units[$property];
-                if($swf->{$property} >= $rules[$property])
-                {
-                    $classes[$property] = 'warn';
-                    $classes['infobox'] = 'cross';
-                }
+                case 'application/x-shockwave-flash':
+                case 'application/vnd.adobe.flash.movie':
+                    $fileInfo = new SwfInfo($filepath);
+                break;
+                case 'image/gif':
+                    $fileInfo = new GifInfo($filepath);
+                break;
+                case 'image/jpeg':
+                    $fileInfo = new JpgInfo($filepath);
+                break;
+                case 'image/png':
+                    $fileInfo = new PngInfo($filepath);
+                break;
             }
-            else
-            {
-                $classes[$property] = '';
-            }
+            $fileInfo = $fileInfo->analyze();
+        }
+        else
+        {
+            $formatNotSupported = true;
+            $uploadError = true;
         }
     }
+
     else
     {
-        $filename = $_FILES['swf_file']['name'];
         $uploadError = true;
     }
-
 }
 
+
+// generate html output
 require_once('views/header.html');
 require('views/seperator.html');
 require_once('views/upload.html');
 
-if(isset($swf)) {
+if(isset($fileInfo))
+{
     // display result
     require('views/seperator.html');
     require_once('views/swf_info.php');
 }
-else if($uploadError)
+else if(isset($uploadError) && $uploadError)
 {
     require('views/seperator.html');
     require('views/error.html');
@@ -94,62 +96,13 @@ require_once('views/footer.html');
 exit(0);
 
 
-
-
-
-
-
-
-
-
-
-
-
-/**
- * analyzeSwf
- *
- * actually kindof a wrapper using the swfHeader-class and modifying the result to reflect our needs
- *
- * @param mixed $filename
- * @access public
- * @return void
- */
-function analyzeSwf($filename)
-{
-    require_once('swfheader.class.php');
-
-    // analyze swf file
-    $swf = new swfHeader();
-    $swf->getDimensions($filename);
-    $swf->framerate = 0;
-    foreach($swf->fps as $fps)
-    {
-        if($fps > $swf->framerate)
-        {
-            $swf->framerate = $fps;
-        }
-    }
-    // filesize in kb with two decimal places
-    $swf->filesize = roundDecimals($swf->size / 1024);
-
-    // duration
-    $swf->duration = roundDecimals($swf->frames / $swf->framerate);
-
-    // name without path
-    $swf->name = $_FILES['swf_file']['name'];
-
-    // dimensions as one string:
-    $swf->dimensions = $swf->width . 'x' . $swf->height;
-
-    return $swf;
-}
-
-
 function roundDecimals($value)
 {
+    if(!defined(NUM_DECIMALS))
+    {
+        define('NUM_DECIMALS', 2);
+    }
     $decMultiplier = pow(10, NUM_DECIMALS);
     $value = (ceil($value * $decMultiplier)) / $decMultiplier;
     return $value;
 }
-
-
