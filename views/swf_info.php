@@ -6,27 +6,20 @@
     <div id="swfbox">
         <div class="preview_header">
             <h2>preview</h2>
+            <?php echo $fileInfo->getHtml(); ?>
         </div>
-        <object id="flash"
-                width="<?php echo $swf->width; ?>"
-                height="<?php echo $swf->height; ?>"
-                data="<?php echo $swf->fname; ?>"
-                type="application/x-shockwave-flash">
-            <param name="src" value="<?php echo 'tmp/' . $swf->fname; ?>">
-            <!-- Alternativinhalt -->
-        </object>
     </div>
-    <div id="infobox" class="<?php echo $classes['infobox']; ?>">
+    <div id="infobox" class="<?php echo $fileInfo->classes['infobox']; ?>">
         <div class="prop_header">
             <h2>properties</h2>
         </div>
         <!-- swf info fields -->
         <?php foreach($fileInfo->fields AS $curField): ?>
-        <div class="info <?php echo $classes[$curField]; ?>"
+        <div class="info <?php echo $fileInfo->classes[$curField]; ?>"
              id="<?php echo $curField; ?>"
-             title="<?php echo $recommendations[$curField]; ?>">
+             title="<?php echo $fileInfo->recommendations[$curField]; ?>">
             <span class="infolabel"><?php echo $fileInfo->labels[$curField]; ?>:</span>
-            <span><?php echo $swf->{$curField}; ?> <?php echo $units[$curField]; ?></span>
+            <span><?php echo $fileInfo->{$curField}; ?> <?php echo $fileInfo->units[$curField]; ?></span>
         </div>
         <?php endforeach; ?>
         <!-- end swf info fields -->
