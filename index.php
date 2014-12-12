@@ -3,7 +3,6 @@
 define('__ROOT__', './');
 
 require_once('classes.php');
-require_once('libraries/classes/APIConnector.class.php');
 
 define('NUM_DECIMALS', 2);
 
@@ -41,7 +40,7 @@ if(count($_FILES) > 0)
     $fileAvailable = true;
     $outputFormat = 'HTML';
 }
-else if($filepath !== '' && file_exists($filepath))
+else if(isset($filepath) && $filepath !== '' && file_exists($filepath))
 {
     $filename = basename($filepath);
     $mimetype = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $filepath);

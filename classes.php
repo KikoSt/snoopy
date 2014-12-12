@@ -1,5 +1,7 @@
 <?php
 
+require_once('libraries/classes/APIConnector.class.php');
+
 class MediaInfo
 {
     public $fields;             // field identifier
@@ -35,7 +37,6 @@ class MediaInfo
 
         $connector = new APIConnector();
         $this->allowedDimensions = $connector->getAllowedBannerDimensions();
-
     }
 
     public function checkRules()
