@@ -6,17 +6,16 @@ require_once('classes.php');
 
 define('NUM_DECIMALS', 2);
 
-if(count($argv) > 1)
+$fileAvailable = false;
+$uploadError = false;
+$formatNotSupported = false;
+$outputFormat = 'HTML';
+$mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
+
+if(isset($argv) && count($argv) > 1)
 {
     $filepath = $argv[1];
 }
-
-$fileAvailable = true;
-$uploadError = false;
-$formatNotSupported = false;
-$outputFormat = '';
-$mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
-
 
 // check if there is a file attached
 if(count($_FILES) > 0)
@@ -48,7 +47,6 @@ else if(isset($filepath) && $filepath !== '' && file_exists($filepath))
     $filesize = filesize($filepath);
     $uploadError = 0;
     $fileAvailable = true;
-
     $outputFormat = 'plain';
 }
 

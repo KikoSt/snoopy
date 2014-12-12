@@ -89,6 +89,8 @@ class MediaInfo
     public function hasValidDimensions()
     {
         $dimensionsOk = false;
+        $this->recommendations['dimensions'] = "accepted file dimensions:\n";
+
         foreach($this->allowedDimensions AS $dim)
         {
             if($dim->width > 0 && $dim->height > 0)
