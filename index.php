@@ -107,7 +107,7 @@ if($outputFormat === 'HTML')
     {
         // display result
         require('views/seperator.html');
-        require_once('views/swf_info.php');
+        require_once('views/media_info.php');
     }
     else if(isset($uploadError) && $uploadError)
     {
