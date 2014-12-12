@@ -3,17 +3,23 @@
 define('__ROOT__', './');
 
 require_once('classes.php');
-require_once('libraries/classes/APIConnector.class.php');
 
 define('NUM_DECIMALS', 2);
+
+$fileAvailable = false;
+$uploadError = false;
+$formatNotSupported = false;
+$outputFormat = 'HTML';
+$mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
+
+if(isset($argv) && count($argv) > 1)
+{
+    $filepath = $argv[1];
+}
 
 // check if there is a file attached
 if(count($_FILES) > 0)
 {
-    $uploadError = false;
-    $formatNotSupported = false;
-    $mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
-
     $filename    = $_FILES['media']['name'];
     $filepath    = 'tmp/' . $filename;
     $tempname    = $_FILES['media']['tmp_name'];
@@ -30,7 +36,23 @@ if(count($_FILES) > 0)
         echo 'An error occured: ' . $uploadError;
         exit($uploadError);
     }
+    $fileAvailable = true;
+    $outputFormat = 'HTML';
+}
+else if(isset($filepath) && $filepath !== '' && file_exists($filepath))
+{
+    $filename = basename($filepath);
+    $mimetype = finfo_file(finfo_open(FILEINFO_MIME_TYPE), $filepath);
+    $tempname = $filepath;
+    $filesize = filesize($filepath);
+    $uploadError = 0;
+    $fileAvailable = true;
+    $outputFormat = 'plain';
+}
 
+// mimetype is only known if we found a valid file
+if($fileAvailable)
+{
     if(in_array($mimetype, $mimetypes))
     {
         move_uploaded_file($tempname, $filepath);
@@ -74,23 +96,40 @@ if(count($_FILES) > 0)
 }
 
 
-// generate html output
-require_once('views/header.html');
-require('views/seperator.html');
-require_once('views/upload.html');
+if($outputFormat === 'HTML')
+{
+    // generate html output
+    require_once('views/header.html');
+    require('views/seperator.html');
+    require_once('views/upload.html');
 
-if(isset($fileInfo))
-{
-    // display result
-    require('views/seperator.html');
-    require_once('views/swf_info.php');
+    if(isset($fileInfo))
+    {
+        // display result
+        require('views/seperator.html');
+        require_once('views/swf_info.php');
+    }
+    else if(isset($uploadError) && $uploadError)
+    {
+        require('views/seperator.html');
+        require('views/error.html');
+    }
+    require_once('views/footer.html');
 }
-else if(isset($uploadError) && $uploadError)
+else if($outputFormat === 'plain')
 {
-    require('views/seperator.html');
-    require('views/error.html');
+    if(isset($fileInfo))
+    {
+        unset($fileInfo->recommendations);
+        unset($fileInfo->labels);
+        unset($fileInfo->allowedDimensions);
+        unset($fileInfo->fields);
+        // unset($fileInfo->classes);
+        unset($fileInfo->units);
+        unset($fileInfo->rules);
+        echo JSON_encode($fileInfo);
+    }
 }
-require_once('views/footer.html');
 
 // end of program
 exit(0);
