@@ -33,6 +33,11 @@
                 $('.toggle').addClass('is_on');
             }
         });
+
+        if(-1 == navigator.userAgent.search('Chrome')) {
+            console.log('!');
+            $('#settings').remove();
+        }
     });
     </script>
 </head>
