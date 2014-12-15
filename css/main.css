@@ -25,6 +25,10 @@ hr {
     height: 1px;
 }
 
+object {
+    margin: 0px 10px 0px 10px;
+}
+
 /* input {                          */
 /*     border: 0px;                 */
 /*     background-color: #000000;   */
@@ -44,30 +48,39 @@ hr {
     background: #000000 url(../img/mdlogo_white-border.png) 10px 10px no-repeat;
 }
 
+#upload_box {
+    width: auto;
+    max-width: 300px;
+}
+
+#upload {
+    float: right;
+}
+
+
+/* contains ALL content, i.e. upload and media section */
 #content {
     padding-left: 40px;
     padding-top: 20px;
 }
 
-#swf_content {
+/* container for the media content: preview and info */
+#media_content {
     background: #ffffff;
-    display: table-row;
+    height: auto;
 }
 
-#swfbox {
-    display: table-cell;
-    background: #dddddd;
+/* media preview */
+#previewbox {
+    background: #777777;
     height: 100%;
     padding: 10px;
     padding-bottom: 20px;
+    float: left;
 }
 
-object {
-    margin: 0px 10px 0px 10px;
-}
-
+/* info 'table' */
 #infobox {
-    display: table-cell;
     height: 300px;
     min-height: 300px;
     padding: 10px;
@@ -75,30 +88,42 @@ object {
     padding-left: 50px;
     padding-bottom: 20px;
     margin-bottom: 20px;
+    float: left;
 }
 
 .info:nth-child(even) {
     background-color: #cfcfcf;
 }
 
+/* infobox bg if everything is okay */
 #infobox.check {
     background:#dddddd url(../img/check.png) 87% 90% no-repeat;
 }
 
+/* infobox bg if ad doesn't comply with all rules */
 #infobox.cross {
     background:#dddddd url(../img/cross.png) 87% 90% no-repeat;
 }
 
+/* container holding ONE line of information about the selected ad */
 .info {
     padding: 3px;
     width: 350px;
     vertical-align: top;
 }
 
+.infolabel {
+    display: inline-block;
+    width: 170px;
+    font-weight: bold;
+}
+
+/* subclass for highlighting problematic properties in infobox */
 .warn {
     color: #ff0000;
 }
 
+/* upload error message markup */
 .error {
     color: #ff0000;
     font-size: 1.6em;
@@ -109,13 +134,43 @@ object {
     padding-left: 10px;
 }
 
-.infolabel {
-    display: inline-block;
-    width: 170px;
-    font-weight: bold;
+#filetype_select{
 }
 
-img.icon_result {
-    vertical-align: bottom;
-    float: right;
+#settings {
+    border: 1px solid #999999;
+    padding: 0px;
+    margin:  0px;
+    margin-top: 25px;
+}
+
+.toggle {
+    width: 100%;
+    height: 20px;
+    padding: 0px;
+    padding-top: 4px;
+    margin: 0px;
+    background-color: #777777;
+    color: #dddddd;
+}
+
+.toggle:before {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.is_on:before {
+    content: "\0025B2";
+}
+
+.is_off:before {
+    content: "\0025BC";
+}
+
+.settings_content {
+    display: none;
+    padding: 5px;
+    margin: 5px;
 }

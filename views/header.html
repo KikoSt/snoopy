@@ -6,6 +6,35 @@
     <script src="js/jquery.webui-popover.js"></script>
     <link rel="stylesheet" href="css/main.css" />
     <link rel="stylesheet" href="css/jquery.webui-popover.min.css" />
+    <script type="text/javascript">
+    var file_mime_lookup = {'swf' : 'application/x-shockwave-flash, application/vnd.adobe.flash.movie',
+                            'gif' : 'image/gif',
+                            'jpeg': 'image/jpeg',
+                            'png' : 'image/png'
+                           };
+    $(document).ready(function() {
+        // if js is enabled, jquery tooltips are used, no title attribute is required and it would
+        // actually break the design being additionally displayed. Thus we remove it entirely here.
+        $('.info').removeAttr('title');
+        $('.tooltip').webuiPopover({trigger:'hover'});
+
+        $('.filetype_select').on('change', function() {
+            var selectedType = $(this).attr('id');
+            $('#fileselect').attr('accept', file_mime_lookup[selectedType]);
+        });
+
+        $('.toggle').on('click', function() {
+            $('.settings_content').toggle();
+            if($('.toggle').hasClass('is_on')) {
+                $('.toggle').removeClass('is_on');
+                $('.toggle').addClass('is_off');
+            } else {
+                $('.toggle').removeClass('is_off');
+                $('.toggle').addClass('is_on');
+            }
+        });
+    });
+    </script>
 </head>
 <body>
 <div id="topbar">

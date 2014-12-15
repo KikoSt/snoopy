@@ -1,5 +1,19 @@
+<div id="upload_box">
 <form enctype="multipart/form-data" action="" method="POST">
     <input type="hidden" name="MAX_FILE_SIZE" value="2097152" />
     <input type="file" class="filestyle" id="fileselect" value="select swf" name="media">
-    <input type="submit" value="check file" />
+    <input id="upload" type="submit" value="check file" />
 </form>
+<div id="settings">
+    <div class="toggle is_off">select filetypes</div>
+    <div class="settings_content">
+        <form id="filetype_select" action="" method="POST">
+            <input type="radio"<?php echo($filetype === 'all'  ? 'checked="checked"' : ''); ?> name="filetype" class="filetype_select" id="all">all file types</input>
+            <input type="radio"<?php echo($filetype === 'swf'  ? 'checked="checked"' : ''); ?> name="filetype" class="filetype_select" id="swf">swf</input>
+            <input type="radio"<?php echo($filetype === 'gif'  ? 'checked="checked"' : ''); ?> name="filetype" class="filetype_select" id="gif">gif</input>
+            <input type="radio"<?php echo($filetype === 'jpeg' ? 'checked="checked"' : ''); ?> name="filetype" class="filetype_select" id="jpeg">jpeg</input>
+            <input type="radio"<?php echo($filetype === 'png'  ? 'checked="checked"' : ''); ?> name="filetype" class="filetype_select" id="png">png</input>
+        </form>
+    </div>
+</div>
+</div>
