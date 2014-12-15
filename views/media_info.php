@@ -1,5 +1,5 @@
-<div id="swf_content">
-    <div id="swfbox">
+<div id="media_content">
+    <div id="previewbox">
         <div class="preview_header">
             <h2>preview</h2>
             <?php echo $fileInfo->getHtml(); ?>
@@ -23,9 +23,3 @@
         <!-- end swf info fields -->
     </div>
 </div>
-<script>
-    // if js is enabled, jquery tooltips are used, no title attribute is required and it would
-    // actually break the design being additionally displayed. Thus we remove it entirely here.
-    $('.info').removeAttr('title');
-    $('.tooltip').webuiPopover({trigger:'hover'});
-</script>

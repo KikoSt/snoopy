@@ -11,6 +11,7 @@ $uploadError = false;
 $formatNotSupported = false;
 $outputFormat = 'HTML';
 $mimetypes = array('application/x-shockwave-flash', 'application/vnd.adobe.flash.movie', 'image/gif', 'image/jpeg', 'image/png');
+$filetype = 'all';
 
 if(isset($argv) && count($argv) > 1)
 {
@@ -69,15 +70,19 @@ if($fileAvailable)
                 case 'application/x-shockwave-flash':
                 case 'application/vnd.adobe.flash.movie':
                     $fileInfo = new SwfInfo($filepath);
+                    $filetype = 'swf';
                 break;
                 case 'image/gif':
                     $fileInfo = new GifInfo($filepath);
+                    $filetype = 'gif';
                 break;
                 case 'image/jpeg':
                     $fileInfo = new JpgInfo($filepath);
+                    $filetype = 'jpeg';
                 break;
                 case 'image/png':
                     $fileInfo = new PngInfo($filepath);
+                    $filetype = 'png';
                 break;
             }
             $fileInfo = $fileInfo->analyze();
@@ -137,7 +142,7 @@ exit(0);
 
 function roundDecimals($value)
 {
-    if(!defined(NUM_DECIMALS))
+    if(!defined('NUM_DECIMALS'))
     {
         define('NUM_DECIMALS', 2);
     }
