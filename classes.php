@@ -181,7 +181,7 @@ class SwfInfo extends AnimatedMediaInfo
         $this->frames   = $swf->frames;
 
         // duration
-        $this->duration = roundDecimals($swf->frames / $swf->framerate);
+        $this->duration = roundDecimals($this->frames / $this->framerate);
 
         // dimensions as one string:
         $this->dimensions = $swf->width . 'x' . $swf->height;
@@ -266,6 +266,7 @@ class GifInfo extends AnimatedMediaInfo
         }
 
         $this->frames     = $framecount;
+        if($avgFramerate == 0) $avgFramerate = 100;
         $this->framerate  = intval(ceil(100/$avgFramerate));
         $this->duration   = roundDecimals($duration / 100);
 

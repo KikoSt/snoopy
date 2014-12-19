@@ -34,10 +34,13 @@
             }
         });
 
-        if(-1 == navigator.userAgent.search('Chrome')) {
-            console.log('!');
+        console.log(navigator.userAgent);
+        if(-1 != navigator.userAgent.search('Firefox')) {
             $('#settings').remove();
         }
+
+        var maxPreviewWidth = (Math.max.apply(Math, $('.previewbox').map(function(){ return $(this).width(); }).get()));
+        $('.previewbox').width(maxPreviewWidth);
     });
     </script>
 </head>

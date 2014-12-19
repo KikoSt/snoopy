@@ -1,11 +1,11 @@
-<div id="media_content">
-    <div id="previewbox">
+<div class="media_content">
+    <div class="previewbox">
         <div class="preview_header">
             <h2>preview</h2>
             <?php echo $fileInfo->getHtml(); ?>
         </div>
     </div>
-    <div id="infobox" class="<?php echo $fileInfo->classes['infobox']; ?>">
+    <div class="infobox <?php echo $fileInfo->classes['infobox']; ?>">
         <div class="prop_header">
             <h2>properties</h2>
         </div>
@@ -23,3 +23,4 @@
         <!-- end swf info fields -->
     </div>
 </div>
+<div style="clear:both"></div>

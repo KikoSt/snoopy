@@ -65,15 +65,16 @@ object {
 }
 
 /* container for the media content: preview and info */
-#media_content {
+.media_content {
     min-height: 350px;
+    height: auto;
     width: auto;
+    padding-bottom: 30px;
 }
 
 /* media preview */
-#previewbox {
+.previewbox {
     background: #808080;
-    height: 100%;
     padding: 10px;
     padding-bottom: 20px;
     padding-right: 20px;
@@ -81,8 +82,7 @@ object {
 }
 
 /* info 'table' */
-#infobox {
-    height: 100%;
+.infobox {
     min-height: 300px;
     padding: 10px;
     padding-right: 40px;
@@ -98,12 +98,12 @@ object {
 }
 
 /* infobox bg if everything is okay */
-#infobox.check {
+.infobox.check {
     background:#dddddd url(../img/check.png) 87% 90% no-repeat;
 }
 
 /* infobox bg if ad doesn't comply with all rules */
-#infobox.cross {
+.infobox.cross {
     background:#dddddd url(../img/cross.png) 87% 90% no-repeat;
 }
 
